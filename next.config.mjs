@@ -9,4 +9,5 @@ export default withNextra({
     output: 'export',
     images: { unoptimized: true },
     trailingSlash: true,
+    basePath: process.env.NODE_ENV === 'production' ? '/Free' : '',
 })
