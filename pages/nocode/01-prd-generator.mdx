@@ -1,0 +1,211 @@
+import { Callout } from 'nextra/components'
+import CopyButton from '../../components/CopyButton'
+
+export const promptText = `You are a Principal Product & Systems Architect for IT projects.
+Your task: produce a world-class **Product Requirements Document (PRD)** that can be handed to a vibecoding tool to generate a high-quality, production-ready app.
+
+== INPUT =========================================================
+<APP_BRIEF>
+[Optional: ACTORS=…]
+[Optional: PRIMARY_TZ=… (e.g., Europe/Moscow)]
+[Optional: REGION/REGULATIONS=…]
+[Optional: BRANDING=…]
+[Optional: INTEGRATIONS=(e.g., Telegram Bot API, Google Calendar v3, Stripe, Twilio, Gmail)]
+[Optional: NON_FUNCTIONAL=(perf, SLOs, observability, security)]
+[Optional: DATA_RETENTION/PRIVACY=…]
+==================================================================
+
+== OUTPUT — STRICT STRUCTURE ====================================
+# Product Requirements Document (PRD)
+# <App Name — derive from brief>
+
+## 1. Executive Summary
+- One paragraph business context + the "job to be done".
+- Core value, primary actor(s), success criteria.
+
+## 2. Scope & User Flows
+- Primary flows as numbered steps and happy-path diagrams-in-text.
+- Edge flows (errors, retries, cancellations).
+- For bots: command list, throttling rules, anti-spam.
+
+## 3. Functional Requirements
+- Feature list with acceptance criteria (Given/When/Then).
+- Configuration matrix (what is configurable, where хранится).
+- Permissions/roles model (Admin, Member, Anonymous, Bot).
+
+## 4. System Architecture (bolt.new-ready)
+- Frontend: React 18+ TS, Tailwind, lucide-react. State strategy.
+- Backend: Supabase (Postgres, Auth, Realtime), Edge Functions (Deno).
+- Integrations: name exact APIs and version; auth scheme.
+- Sequence diagrams in prose for critical paths (booking, cancel, sync).
+
+## 5. Database Schema (DDL + constraints)
+- Tables with columns, types, defaults, **enums**, **unique indexes** (to prevent races), FKs.
+- Migration filenames (timestamped) and order.
+- Triggers (e.g., ensure SINGLETON settings row).
+- Sample SQL for **unique constraints** preventing double-book.
+
+## 6. Security & RLS Policies
+- RLS per table: **who can SELECT/INSERT/UPDATE/DELETE**.
+- Principle: writes **only** via Edge Functions (service role); anon read-only where needed.
+- Secrets storage: **Supabase Secrets/Vault** (not in plain tables).
+- Telegram webhook verification via X-Telegram-Bot-Api-Secret-Token.
+- Input validation & sanitization.
+
+## 7. Edge Functions (Deno) — Specs
+For each function:
+- Path, purpose, inputs/outputs (JSON), status codes.
+- CORS headers (exact), OPTIONS handling.
+- Pseudocode with try/catch and typed errors.
+- Rate limiting strategy.
+- Idempotency keys where needed.
+
+(If booking system)
+- **Race handling**: transaction, conflict retry, unique index.
+- Calendar busy check strategy.
+
+## 8. Integrations — Deep Details
+- Exact endpoints, scopes, auth method.
+- Known limits (e.g., Telegram callback_data length 64).
+- Google Calendar: service account vs user OAuth; Meet link caveats (Workspace requirement) and graceful fallback.
+- Retries, backoff, and quota handling.
+
+## 9. Timezone & Locale
+- Internal UTC; boundary conversions.
+- PRIMARY_TZ=<from input or best default>; DST policy; per-user TZ capture (if relevant).
+
+## 10. UI/UX Requirements
+- Navigation map, components inventory.
+- States: loading/empty/error/success/skeleton.
+- A11y basics (focus order, aria), responsive breakpoints.
+- Content design for errors and confirmations.
+
+## 11. Non-Functional Requirements (SLOs)
+- Performance budgets (TTFB, FCP, API p95).
+- Observability: structured logs, Sentry/Logflare integration.
+- Backups & restoration.
+- Data retention & PII redaction policy.
+
+## 12. Testing Strategy
+- Unit, integration (edge functions), and E2E (Playwright) suites.
+- Contract tests for external APIs (mock).
+- Acceptance checklist (Given/When/Then bullets).
+
+## 13. Deployment & Config
+- Env vars (frontend vs edge functions).
+- Build commands, CI steps.
+- Post-deploy health checks.
+- Rollback plan.
+
+## 14. Risks & Mitigations
+- Enumerate top risks (auth, quotas, races, TZ).
+- Mitigation tactics and monitoring hooks.
+
+## 15. Success Metrics
+- Quantitative KPIs tightly coupled с ценностью продукта.
+
+## 16. Future Enhancements (Out of Scope)
+- Roadmap items and required architectural hooks today.
+
+## 17. Bolt.new Build Plan (File Map)
+- project/ tree with key files (components, edge functions, migrations).
+- Stubs for each file with 1–2 critical code snippets (TS) that lock tricky parts:
+  - CORS headers (exact).
+  - TZ conversion helper.
+  - Free/busy overlap check.
+  - Transactional booking with unique index conflict handling.
+  - Webhook verification snippet.
+
+== AUTHORING RULES ==============================================
+- If input is ambiguous, **state explicit assumptions** before specs.
+- Prefer enums over free-text columns; prefer **unique indexes** for invariants.
+- Never put secrets in client; store in Secrets/Vault; in DB — only encrypted if unavoidable.
+- Make race conditions unrepresentable (indexes + transactions).
+- Provide code blocks sparingly for critical fragments, not full apps.
+- Russian language output; concise, инженерный стиль.
+================================================================`
+
+# 01. PRD для Vibecoding
+
+Генерация полного технического задания (PRD) для создания приложения через bolt.new.
+
+<Callout type="warning">
+**Источник:** Промпт от Николая Хлебинского ([t.me/nikolay_khl](https://t.me/nikolay_khl))
+</Callout>
+
+## Что делает этот промпт
+
+| | | |
+|:--|:--|:--|
+| **Генерирует PRD на 17 разделов** — полное техзадание | **Готов для bolt.new** — можно сразу загружать | **Включает архитектуру** — React, Supabase, Deno |
+| **Продумывает безопасность** — RLS, secrets, валидация | **Описывает базу данных** — схема, миграции, индексы | **Планирует интеграции** — API, webhooks, auth |
+| **Предусматривает тесты** — unit, E2E, контрактные | **Учитывает таймзоны** — UTC, конверсия, DST | **Даёт файловую структуру** — готовый план проекта |
+
+## Как использовать
+
+1. **Напишите бриф** — 2-6 абзацев с описанием идеи
+2. **Укажите опции** (необязательно):
+   - ACTORS — кто будет пользоваться
+   - PRIMARY_TZ — часовой пояс (Europe/Moscow)
+   - INTEGRATIONS — какие API нужны (Telegram, Google Calendar, Stripe)
+3. **Вставьте в ChatGPT** — получите PRD
+4. **Загрузите PRD в bolt.new** — получите код
+
+## Для лучшего результата
+
+- Опишите идею максимально конкретно
+- Укажите, какие интеграции нужны
+- Скажите, кто будет пользователями (роли)
+- Упомяните ограничения (регион, регуляции)
+
+---
+
+## Промпт
+
+<div style={{ marginBottom: '16px' }}>
+  <CopyButton text={promptText} />
+</div>
+
+**Роль:** You are a Principal Product & Systems Architect for IT projects.
+
+**Задача:** Produce a world-class Product Requirements Document (PRD) that can be handed to a vibecoding tool to generate a high-quality, production-ready app.
+
+### Входные данные
+
+```
+<APP_BRIEF>
+[Ваше описание приложения на 2-6 абзацев]
+</APP_BRIEF>
+
+[Optional: ACTORS=…]
+[Optional: PRIMARY_TZ=… (e.g., Europe/Moscow)]
+[Optional: INTEGRATIONS=(e.g., Telegram Bot API, Google Calendar v3)]
+```
+
+### Структура выходного PRD (17 разделов)
+
+| # | Раздел | Что содержит |
+|:--|:--|:--|
+| 1 | **Executive Summary** | Краткое описание: бизнес-контекст, ценность, критерии успеха |
+| 2 | **Scope & User Flows** | Пользовательские сценарии: основные и крайние случаи |
+| 3 | **Functional Requirements** | Список фич с критериями приёмки (Given/When/Then) |
+| 4 | **System Architecture** | Архитектура: React, Supabase, Edge Functions |
+| 5 | **Database Schema** | Схема БД: таблицы, типы, индексы, миграции |
+| 6 | **Security & RLS** | Безопасность: права доступа, хранение секретов |
+| 7 | **Edge Functions** | Серверные функции: пути, входы/выходы, обработка ошибок |
+| 8 | **Integrations** | Интеграции: API, лимиты, авторизация |
+| 9 | **Timezone & Locale** | Часовые пояса: UTC, конверсия, DST |
+| 10 | **UI/UX Requirements** | Интерфейс: навигация, состояния, адаптивность |
+| 11 | **Non-Functional (SLOs)** | Производительность: метрики, логи, бэкапы |
+| 12 | **Testing Strategy** | Тестирование: unit, E2E, контрактные тесты |
+| 13 | **Deployment & Config** | Деплой: переменные, CI, откат |
+| 14 | **Risks & Mitigations** | Риски: что может сломаться и как защититься |
+| 15 | **Success Metrics** | Метрики успеха: KPI продукта |
+| 16 | **Future Enhancements** | Будущее: что вне скоупа, но нужны хуки |
+| 17 | **Build Plan (File Map)** | Файловая структура: дерево проекта + сниппеты |
+
+---
+
+<Callout type="info">
+**Совет:** Начните с простого брифа, получите PRD, затем уточняйте через итерации.
+</Callout>

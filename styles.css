@@ -1,0 +1,133 @@
+/* Custom Typography Hierarchy */
+/* Strong visual difference between heading levels */
+
+/* Main title (H1) - HUGE, the focal point */
+.nextra-content h1 {
+    font-size: 2.25rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.2 !important;
+}
+
+/* Section headers (H2) - Notably smaller, with divider */
+.nextra-content h2 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    margin-top: 2.5rem !important;
+    margin-bottom: 0.75rem !important;
+    padding-top: 1.5rem !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.15) !important;
+    opacity: 0.9;
+}
+
+/* First H2 after H1 - no top border */
+.nextra-content h1+h2,
+.nextra-content h1+*+h2 {
+    border-top: none !important;
+    margin-top: 1.5rem !important;
+    padding-top: 0 !important;
+}
+
+/* Subsection headers (H3) - Small, subdued */
+.nextra-content h3 {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+    opacity: 0.6;
+}
+
+/* Small headers (H4) - Tiny, very subtle */
+.nextra-content h4 {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.4rem !important;
+    opacity: 0.5;
+}
+
+/* Body text */
+.nextra-content p {
+    font-size: 0.95rem !important;
+    line-height: 1.7 !important;
+    margin-bottom: 0.75rem !important;
+    opacity: 0.8;
+}
+
+/* Lists */
+.nextra-content ul,
+.nextra-content ol {
+    margin-bottom: 0.75rem !important;
+    padding-left: 1.25rem !important;
+}
+
+.nextra-content li {
+    margin-bottom: 0.4rem !important;
+    font-size: 0.95rem !important;
+    opacity: 0.8;
+}
+
+/* Tables */
+.nextra-content table {
+    width: 100% !important;
+    margin: 1rem 0 !important;
+    border-collapse: collapse !important;
+    font-size: 0.875rem !important;
+}
+
+.nextra-content th {
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-align: left !important;
+    padding: 0.6rem 0.75rem !important;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.15) !important;
+    opacity: 0.6;
+}
+
+.nextra-content td {
+    padding: 0.6rem 0.75rem !important;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.08) !important;
+    font-size: 0.875rem !important;
+}
+
+/* Blockquotes */
+.nextra-content blockquote {
+    border-left: 3px solid rgba(59, 130, 246, 0.4) !important;
+    padding: 0.75rem 1rem !important;
+    margin: 1rem 0 !important;
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+    background: rgba(59, 130, 246, 0.03) !important;
+}
+
+.nextra-content blockquote p {
+    font-size: 1rem !important;
+    margin: 0 !important;
+    opacity: 0.9 !important;
+}
+
+/* Horizontal rules */
+.nextra-content hr {
+    border: none !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.1) !important;
+    margin: 2rem 0 !important;
+}
+
+/* Strong text */
+.nextra-content strong {
+    font-weight: 600 !important;
+    opacity: 1 !important;
+}
+
+/* Page intro after title */
+article.nextra-content>h1:first-child+p,
+article.nextra-content>h1:first-child+.nextra-callout+p {
+    font-size: 1rem !important;
+    opacity: 0.65 !important;
+}
